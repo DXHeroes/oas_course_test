@@ -3,7 +3,7 @@ Set of materials for tester OAS course
 
 
 # Presentation:
-[CSAS_tester.pdf](https://drive.google.com/file/d/1YeKFbugLc_i7XBJJVNeVEBYbpDEFoUr5/view?usp=sharing)
+[CSAS_tester.pdf](https://drive.google.com/file/d/1RNccCLq6eJvOj83AnoAK32OutBY6DLAl/view?usp=sharing)
 
 
 # Practical excercises
