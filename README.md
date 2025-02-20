@@ -12,7 +12,6 @@ This section is divided into 4 sections:
  - JSON Schema - basic of JSON Schema exercises
  - OpenAPI Basics - basics of OpenAPI exercises
  - Using OpenAPI Schema in practice - using OpenAPI Schema in practice 
- - Implementing OAS - implementing OAS in simple Java project
 
  ### Used tools:
 
@@ -483,44 +482,3 @@ Use Postman to test OpenAPI Schema. You can use it to import OpenAPI Schema and 
 Use OpenAPI Editor to edit OpenAPI Schema. You can use it to edit OpenAPI Schema, mock server and test API.
 
   ![OpenAPI Editor](images/swagger.png)
-
-## 4. Implementing OAS
-
-<!-- TODO: prerekvizity ke spuštění -->
-
-From [final_state.yaml](final_state.yaml) file you can see the final state of the API specification. Your task is to implement the API in prepared Java project. Project is already prepared with some of the classes implemented.
-
-It can be run using `./scripts/launch_java.sh` command. It will start the Spring Boot application on localhost:8080. You can use it to test your implementation.
-
-### 4.1. Implement Order and OrderItem classes and list all orders endpoint
-
-Create the following classes:
-
-- `Order` class matches the `Order` schema from the API specification
-- `OrderItem` class matches the `OrderItem` schema from the API specification
-- `OrderService` class implements the endpoint `getOrders` from the API specification. DB is just in memory list of orders.
-- `OrderController` class implements the endpoint `getOrders` from the API specification
-
-**Objective:**
-Implement the `Order` and `OrderItem` classes and the `getOrders` endpoint.
-
-**Result:**
-
-[possible solution](https://github.com/DXHeroes/oas_course_dev/commit/0ad8fede80c0b77dc2e4bbe7ebe0583a3cbf3942)
-
-### 4.2. Implement delete order by id endpoint
-
-Implement the `deleteOrderById` endpoint.
-
-**Result:**
-
-[possible solution](https://github.com/DXHeroes/oas_course_dev/commit/b42cdf907b34d9971f4a58fbe27fcf1619237b7c)
-
-### 4.3. Implement create order endpoint
-
-Implement the `createOrder` endpoint.
-
-**Result:**
-
-[possible solution](https://github.com/DXHeroes/oas_course_dev/commit/f514b66971163669b654263dac5bc46433b8a202)
-
