@@ -463,22 +463,10 @@ The Coffee Shop API currently supports retrieving, creating, and deleting orders
 [5_result.yaml](OAS_basics/5_result.yaml)
 
 
-## 3. Using OpenAPI Schema in practice
+## 3. Using the OpenAPI Schema to test the API
 
-### Mockbin:
+Import the [final_state.yaml](final_state.yaml) file into Postman and test the API.
 
-You can use Mockbin to create mock server from OpenAPI Schema, it will generate mock server running on public URL. You can use it to test your API before it is implemented.
+You will need to set up environment variables in Postman to switch between different environments (use URL).
 
-  ![Mockbin](images/mockbin.png)
-
-### Postman:
-
-Use Postman to test OpenAPI Schema. You can use it to import OpenAPI Schema and call endpoints. In setup you can use environment variables to switch between different environments (use URL from Mockbin).
-
-  ![Postman](images/postman.png)
-
-### OpenAPI Editor:
-
-Use OpenAPI Editor to edit OpenAPI Schema. You can use it to edit OpenAPI Schema, mock server and test API.
-
-  ![OpenAPI Editor](images/swagger.png)
+### 3.1 Test the API
