@@ -210,6 +210,7 @@ components:
           type: integer
           description: Order ID
           example: 123
+          readOnly: true
         customer_name:
           type: string
           description: Customer name
@@ -219,13 +220,19 @@ components:
         items:
           type: array
           description: Items in the order
+          minItems: 1
           items:
             $ref: "#/components/schemas/OrderItem"
         total_price:
           type: number
           format: float
+          minimum: 0
           description: Total order price
           example: 10.50
+      required:
+        - customer_name
+        - items
+        - total_price
 
     OrderItem: # Schema for OrderItem object
       type: object
@@ -238,6 +245,10 @@ components:
           type: integer
           description: Quantity
           example: 2
+          minimum: 1
+      required:
+        - menu_item_id
+        - quantity
     MenuItem: # Schema for MenuItem object from previous exercises
       description: "A schema representing a menu item."
 
@@ -376,3 +387,10 @@ components:
           type: string
           description: Error message
           example: Internal server error
+        errors:
+          type: array
+          description: List of errors
+          items:
+            type: string
+            description: Error message
+            example: "Invalid order data"

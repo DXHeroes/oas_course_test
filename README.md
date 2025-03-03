@@ -223,89 +223,6 @@ properties:
 
 [3_result.yaml](JSON_schema/3_result.yaml)
 
-### 1.4 JSON Schema - oneOf
-
-Building upon the `MenuItem` schema from Exercise 1.3, enhance the schema to include a `promotion` property that can represent different types of promotions applied to a menu item. Utilize the `oneOf` keyword to define validation rules for the promotion types.
-
-**Requirements:**
-
-1. **`promotion`** (optional):
-   - **Type**: Object
-   - **Description**: Details of the promotion applied to the menu item.
-   - **Validation**:
-     - **`oneOf`**: The `promotion` object must match exactly one of the following schemas:
-       - **Discount Promotion**:
-         - **Properties**:
-           - `type`: Must be the string `"discount"`.
-           - `amount`: A number representing the discount amount.
-         - **Required**: `type`, `amount`
-       - **Buy One Get One Free Promotion**:
-         - **Properties**:
-           - `type`: Must be the string `"bogo"`.
-           - `description`: A string describing the promotion.
-         - **Required**: `type`, `description`
-
-**Example JSON Object:**
-
-```json
-{
-  "id": 456,
-  "name": "Cappuccino",
-  "description": "A delicious cappuccino made with our finest espresso.",
-  "price": 3.50,
-  "size": "Medium",
-  "extraItems": ["Extra Shot", "Soy Milk"],
-  "modifiers": [
-    {
-      "name": "Milk Type",
-      "options": ["Whole Milk", "Skim Milk", "Soy Milk"]
-    },
-    {
-      "name": "Syrup Flavor",
-      "options": ["Vanilla", "Caramel", "Hazelnut"]
-    }
-  ],
-  "promotion": {
-    "type": "discount",
-    "amount": 1.00
-  }
-}
-```
-
-**Objective:**
-
-Learn how to enhance an existing JSON Schema by adding a `promotion` property that can represent different types of promotions applied to a menu item. Utilize the `oneOf` keyword to define validation rules for the promotion types.
-
-oneOf is used to define validation rules for the promotion types.
-
-```yaml
-type: "object"
-properties:
-  # Property that can be one of the following schemas
-  propertyThatCanBeOneOf:
-    oneOf:
-      # First oneOf schema
-      - type: "object"
-        properties:
-          firstProperty:
-            type: "string"
-          secondProperty:
-            type: "string"
-        required:
-          - firstProperty
-          - secondProperty
-      # Second oneOf schema
-      - type: "object"
-        properties:
-          firstProperty:
-            type: "string"
-          secondProperty:
-            type: "string"
-```
-**Result:**
-
-[4_result.yaml](JSON_schema/4_result.yaml)
-
 
 ## 2. OpenAPI Basics
 
@@ -323,15 +240,15 @@ Coffee Shop API by defining a reusable Order component that standardizes the str
 
 - Define the Order Schema
 The Order object should represent a customer's order, including:
-  - **`id`** (integer, read-only): Unique order ID
-  - **`customer_name`** (string, 3-50 characters): Name of the customer
-  - **`items`** (array of OrderItem objects): List of ordered items
-  - **`total_price`** (number, float): Total price of the order
+  - **`id`** (integer, read-only, required): Unique order ID
+  - **`customer_name`** (string, 3-50 characters, required): Name of the customer
+  - **`items`** (array of OrderItem objects, required, minimum 1 item): List of ordered items
+  - **`total_price`** (number, float, required): Total price of the order
 
 - Define the OrderItem Schema
 The OrderItem object should represent an individual item in an order, including:
-  - **`menu_item_id`** (integer): Reference to a menu item
-  - **`quantity`** (integer): Number of times this item was ordered
+  - **`menu_item_id`** (integer, required): Reference to a menu item
+  - **`quantity`** (integer, required, minimum 1): Number of times this item was ordered
 
 **Example JSON Object:**
 
@@ -417,56 +334,54 @@ Add a new endpoint for deleting an order by its ID.
 
 [3_result.yaml](OAS_basics/3_result.yaml)
 
-### 2.4 Add endpoint for creating new order
-
-Enhance the Coffee Shop API by adding a new endpoint for creating a new order. This endpoint should allow users to submit an order with details such as customer name, items ordered, and total price.
-
-**Objective:**
- - Add a new endpoint for creating a new order, it has the same requirements as previous exercise.
-
- **Request Body:**
- - Required: true
- - Content-Type: application/json
- - Schema:
-   - `Order` object
-
- **Responses:**
-   - 201 (Created) - Returns ID of the created order
-   - 400 (Bad Request)
-   - 500 (Internal Server Error)
-
-**Result:**
-
-[4_result.yaml](OAS_basics/4_result.yaml)
-
-### 2.5 Add endpoint for updating order by id
-
-The Coffee Shop API currently supports retrieving, creating, and deleting orders. However, it lacks an endpoint to update an existing order by its ID. This task involves adding a `PUT /orders/{orderId}` endpoint to update an order's details.  
-
-**Method**: `PUT`
-**Path**: `/orders/{orderId}`
-**Description**: Updates an order's details using the provided `orderId`.
-
-**Path Parameter**:
-  - `orderId` (integer, required): The ID of the order to be updated.
-
-**Request Body**:
-- The request body must contain an updated `Order` object.
-
-**Responses**  
-- 200 OK – Order updated successfully. Returns updated object
-- 404 Not Found – Order not found. Returns an error object
-- 500 Internal Server Error – Server error. Returns an error object
-
-**Result:**
-
-[5_result.yaml](OAS_basics/5_result.yaml)
 
 
-## 3. Using the OpenAPI Schema to test the API
 
-Import the [final_state.yaml](final_state.yaml) file into Postman and test the API.
+## 3. Using OpenAPI Schema to mock the API
 
-You will need to set up environment variables in Postman to switch between different environments (use URL).
+### Mockbin:
 
-### 3.1 Test the API
+You can use Mockbin to create mock server from OpenAPI Schema, it will generate mock server running on public URL. You can use it to test your API before it is implemented.
+
+  ![Mockbin](images/mockbin.png)
+
+### Postman:
+
+Use Postman to test OpenAPI Schema. You can use it to import OpenAPI Schema and call endpoints. In setup you can use environment variables to switch between different environments (use URL from Mockbin).
+
+  ![Postman](images/postman.png)
+
+### OpenAPI Editor:
+
+Use OpenAPI Editor to edit OpenAPI Schema. You can use it to edit OpenAPI Schema, mock server and test API.
+
+  ![OpenAPI Editor](images/swagger.png)
+
+## 4. Using the OpenAPI Schema to test the API
+<!-- ngrok http --url=reptile-electric-perfectly.ngrok-free.app 80 -->
+
+Import the [testing_setup.yaml](OAS_testing/testing_setup.yaml) file into Postman and test the API.
+It is subcollection of our created Open API specification. These will be our test cases. Imported structure will look like this:
+
+![Testing setup](images/testing_setup.png)
+
+### 4.2 Make sure you have environment variables in Postman to switch between different environments:
+
+- baseUrl: https://reptile-electric-perfectly.ngrok-free.app/v1
+- basicAuthUsername: admin
+- basicAuthPassword: password
+
+### 4.3 Test the API manually by calling endpoints, play with the data and see how it behaves.
+
+### 4.4 Generate/write test scripts for the API.
+- You can use [OAS_testing/testing_setup.yaml](OAS_testing/testing_setup.yaml) file to generate test cases. ChatGpt/Gordy/Copilot should be able to help you with this, just make sure you provide it with the correct instructions (give it whole spec, and ask it to generate test cases for each endpoint).
+- For each endpoint, create a test case that covers the happy path and the error path.
+- For error path, create a test case that covers the error scenario and the error response.
+
+
+
+
+### 4.5 Run test cases and analyze the results.
+
+
+

@@ -67,89 +67,58 @@ const errorHandler = (err, req, res, next) => {
 const validateOrder = (order) => {
   const errors = [];
   
-  if (!order.customer_name || order.customer_name.length < 3 || order.customer_name.length > 50) {
+  // Check required properties
+  if (!order.hasOwnProperty('customer_name')) {
+    errors.push('customer_name is required');
+  } else if (order.customer_name.length < 3 || order.customer_name.length > 50) {
     errors.push('Customer name must be between 3 and 50 characters');
   }
   
-  if (!Array.isArray(order.items) || order.items.length === 0) {
+  if (!order.hasOwnProperty('items')) {
+    errors.push('items is required');
+  } else if (!Array.isArray(order.items)) {
+    errors.push('items must be an array');
+  } else if (order.items.length === 0) {
     errors.push('Order must contain at least one item');
   } else {
     order.items.forEach((item, index) => {
-      if (!item.menu_item_id || typeof item.menu_item_id !== 'number') {
+      // Check required properties for each order item
+      if (!item.hasOwnProperty('menu_item_id')) {
+        errors.push(`Item ${index}: menu_item_id is required`);
+      } else if (typeof item.menu_item_id !== 'number') {
         errors.push(`Item ${index}: menu_item_id must be a number`);
       }
-      if (!item.quantity || typeof item.quantity !== 'number' || item.quantity <= 0) {
-        errors.push(`Item ${index}: quantity must be a positive number`);
+      
+      if (!item.hasOwnProperty('quantity')) {
+        errors.push(`Item ${index}: quantity is required`);
+      } else if (typeof item.quantity !== 'number' || item.quantity < 1) {
+        errors.push(`Item ${index}: quantity must be a positive number and at least 1`);
       }
     });
   }
+
+  if(order.total_price !== undefined) {
+    if(typeof order.total_price !== 'number' || order.total_price < 0) {
+      errors.push('total_price must be a non-negative number');
+    }
+  }
   
   return errors;
 };
 
-const validateMenuItem = (menuItem) => {
-  const errors = [];
-  
-  if (!menuItem.name || menuItem.name.length < 3 || menuItem.name.length > 50) {
-    errors.push('Name must be between 3 and 50 characters');
-  }
-  
-  if (menuItem.description && menuItem.description.length > 100) {
-    errors.push('Description must not exceed 100 characters');
-  }
-  
-  if (typeof menuItem.price !== 'number' || menuItem.price < 0) {
-    errors.push('Price must be a non-negative number');
-  }
-  
-  if (menuItem.size && !['Small', 'Medium', 'Large'].includes(menuItem.size)) {
-    errors.push('Size must be Small, Medium, or Large');
-  }
-  
-  if (menuItem.extraItems && (!Array.isArray(menuItem.extraItems) || menuItem.extraItems.length > 5)) {
-    errors.push('ExtraItems must be an array with at most 5 items');
-  }
-  
-  if (menuItem.modifiers) {
-    if (!Array.isArray(menuItem.modifiers)) {
-      errors.push('Modifiers must be an array');
-    } else {
-      menuItem.modifiers.forEach((modifier, index) => {
-        if (!modifier.name) {
-          errors.push(`Modifier ${index}: name is required`);
-        }
-        if (!Array.isArray(modifier.options) || modifier.options.length < 1) {
-          errors.push(`Modifier ${index}: options must be an array with at least one item`);
-        }
-      });
-    }
-  }
-  
-  if (menuItem.promotion) {
-    if (menuItem.promotion.type === 'discount') {
-      if (typeof menuItem.promotion.amount !== 'number') {
-        errors.push('Promotion discount amount must be a number');
-      }
-    } else if (menuItem.promotion.type === 'bogo') {
-      if (!menuItem.promotion.description) {
-        errors.push('Promotion BOGO description is required');
-      }
-    } else {
-      errors.push('Promotion type must be either "discount" or "bogo"');
-    }
-  }
-  
-  return errors;
-};
 
 // Routes for Orders
 app.get('/v1/orders', (req, res) => {
+  console.log('Getting all orders', db.orders);
   res.status(200).json(db.orders);
 });
 
 app.post('/v1/orders', (req, res) => {
+  console.log('Creating new order', req.body);
   const order = req.body;
   const errors = validateOrder(order);
+
+  console.log(errors);
   
   if (errors.length > 0) {
     return res.status(400).json({
@@ -180,11 +149,27 @@ app.post('/v1/orders', (req, res) => {
   };
   
   db.orders.push(newOrder);
+
+  console.log('New order created', db.orders);
   res.status(201).json(newOrder.id);
 });
 
 app.delete('/v1/orders/:orderId', (req, res) => {
+  if(!req.params.orderId) {
+    return res.status(400).json({
+      code: 400,
+      message: 'Order ID is required'
+    });
+  }
+  
   const orderId = parseInt(req.params.orderId);
+
+  if(isNaN(orderId)) {
+    return res.status(400).json({
+      code: 400,
+      message: 'Order ID must be a number'
+    });
+  }
   const orderIndex = db.orders.findIndex(o => o.id === orderId);
   
   if (orderIndex === -1) {
@@ -195,11 +180,28 @@ app.delete('/v1/orders/:orderId', (req, res) => {
   }
   
   db.orders.splice(orderIndex, 1);
+  console.log('Order deleted', db.orders);
   res.status(204).send();
 });
 
 app.put('/v1/orders/:orderId', (req, res) => {
+
+  if(!req.params.orderId) {
+    return res.status(400).json({
+      code: 400,
+      message: 'Order ID is required'
+    });
+  }
+  
   const orderId = parseInt(req.params.orderId);
+
+  if(isNaN(orderId)) {
+    return res.status(400).json({
+      code: 400,
+      message: 'Order ID must be a number'
+    });
+  }
+  
   const orderIndex = db.orders.findIndex(o => o.id === orderId);
   
   if (orderIndex === -1) {
@@ -241,6 +243,8 @@ app.put('/v1/orders/:orderId', (req, res) => {
   };
   
   db.orders[orderIndex] = updatedOrder;
+
+  console.log('Order updated', db.orders);
   res.status(200).json(updatedOrder);
 });
 
@@ -261,58 +265,6 @@ app.get('/v1/menu/:menuId', (req, res) => {
   }
   
   res.status(200).json(menuItem);
-});
-
-app.post('/v1/menu', (req, res) => {
-  const menuItem = req.body;
-  const errors = validateMenuItem(menuItem);
-  
-  if (errors.length > 0) {
-    return res.status(400).json({
-      code: 400,
-      message: 'Validation error',
-      errors: errors
-    });
-  }
-  
-  const newMenuItem = {
-    ...menuItem,
-    id: db.nextMenuItemId++
-  };
-  
-  db.menuItems.push(newMenuItem);
-  res.status(200).json(newMenuItem);
-});
-
-app.put('/v1/menu/:menuId', (req, res) => {
-  const menuId = parseInt(req.params.menuId);
-  const menuItemIndex = db.menuItems.findIndex(m => m.id === menuId);
-  
-  if (menuItemIndex === -1) {
-    return res.status(404).json({
-      code: 404,
-      message: `Menu item with ID ${menuId} not found`
-    });
-  }
-  
-  const menuItem = req.body;
-  const errors = validateMenuItem(menuItem);
-  
-  if (errors.length > 0) {
-    return res.status(400).json({
-      code: 400,
-      message: 'Validation error',
-      errors: errors
-    });
-  }
-  
-  const updatedMenuItem = {
-    ...menuItem,
-    id: menuId
-  };
-  
-  db.menuItems[menuItemIndex] = updatedMenuItem;
-  res.status(200).json(updatedMenuItem);
 });
 
 // Apply error handling middleware
