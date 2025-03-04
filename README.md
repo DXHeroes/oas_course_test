@@ -361,27 +361,26 @@ Use OpenAPI Editor to edit OpenAPI Schema. You can use it to edit OpenAPI Schema
 <!-- ngrok http --url=reptile-electric-perfectly.ngrok-free.app 80 -->
 
 Import the [testing_setup.yaml](OAS_testing/testing_setup.yaml) file into Postman and test the API.
-It is subcollection of our created Open API specification. These will be our test cases. Imported structure will look like this:
+It is subcollection of our created Open API specification. These will be our endpoints to test. Imported structure will look like this:
 
 ![Testing setup](images/testing_setup.png)
 
-### 4.2 Make sure you have environment variables in Postman to switch between different environments:
+**Make sure you have environment variables in Postman to switch between different environments:**
 
 - baseUrl: https://reptile-electric-perfectly.ngrok-free.app/v1
 - basicAuthUsername: admin
 - basicAuthPassword: password
 
-### 4.3 Test the API manually by calling endpoints, play with the data and see how it behaves.
+### 4.3 Test the API manually by calling endpoints, play with the data, see how it behaves and think about possible test cases for each endpoint.
 
-### 4.4 Generate/write test scripts for the API.
+You can take a look at possible test cases for each endpoint in [OAS_testing/possible_scenarions.md](OAS_testing/possible_scenarions.md) file.
+
+### 4.4 Generate/write Postman scripts for the /orders endpoints.
 - You can use [OAS_testing/testing_setup.yaml](OAS_testing/testing_setup.yaml) file to generate test cases. ChatGpt/Gordy/Copilot should be able to help you with this, just make sure you provide it with the correct instructions (give it whole spec, and ask it to generate test cases for each endpoint).
-- For each endpoint, create a test case that covers the happy path and the error path.
-- For error path, create a test case that covers the error scenario and the error response.
-
-
-
-
-### 4.5 Run test cases and analyze the results.
+- We will use Postman scripts to run test cases: [https://learning.postman.com/docs/](https://learning.postman.com/docs/tests-and-scripts/write-scripts/intro-to-scripts/)
+- For each endpoint, create a test case that covers the happy path and the error path. 
+- You can take a look at [OAS_testing/possible_scenarions.md](OAS_testing/possible_scenarions.md) file to get ideas about what to test.
+- If you are unsure about how to structure your tests you can import already created test scripts: [OAS_testing/Coffee Shop API - tested.postman_collection.json](OAS_testing/Coffee%20Shop%20API%20-%20tested.postman_collection.json) file.
 
 
 

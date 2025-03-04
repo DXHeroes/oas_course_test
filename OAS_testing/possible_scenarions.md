@@ -1,4 +1,4 @@
-# API Testing Scenarios
+# Possible API Testing Scenarios
 
 ## GET /orders
 
@@ -8,7 +8,6 @@
 
 ### Error Path:
 - Authentication failure (401) when invalid credentials are provided
-- Server error (500) when there's an internal server issue
 
 ## POST /orders
 
@@ -30,7 +29,6 @@
 - Invalid items: quantity less than 1 (400)
 - Invalid items: menu_item_id not found in the menu (400)
 - Authentication failure (401) when invalid credentials are provided
-- Server error (500) when there's an internal server issue
 
 ## DELETE /orders/{orderId}
 
@@ -41,7 +39,6 @@
 - Order not found: non-existent orderId (404)
 - Invalid orderId format (400)
 - Authentication failure (401) when invalid credentials are provided
-- Server error (500) when there's an internal server issue
 
 ## PUT /orders/{orderId}
 
@@ -64,24 +61,3 @@
 - Invalid items: quantity less than 1 (400)
 - Invalid items: menu_item_id not found in the menu (400)
 - Authentication failure (401) when invalid credentials are provided
-- Server error (500) when there's an internal server issue
-
-## GET /menu
-
-### Happy Path:
-- Successfully retrieve all menu items
-
-### Error Path:
-- Authentication failure (401) when invalid credentials are provided
-- Server error (500) when there's an internal server issue
-
-## GET /menu/{menuId}
-
-### Happy Path:
-- Successfully retrieve a specific menu item by ID
-
-### Error Path:
-- Menu item not found: non-existent menuId (404)
-- Invalid menuId format (400)
-- Authentication failure (401) when invalid credentials are provided
-- Server error (500) when there's an internal server issue
