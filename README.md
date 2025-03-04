@@ -11,7 +11,8 @@ Set of materials for tester OAS course
 This section is divided into 4 sections:
  - JSON Schema - basic of JSON Schema exercises
  - OpenAPI Basics - basics of OpenAPI exercises
- - Using OpenAPI Schema in practice - using OpenAPI Schema in practice 
+ - Using OpenAPI Schema to mock the API
+ - Using OpenAPI Schema to test the API
 
  ### Used tools:
 
