@@ -383,4 +383,5 @@ You can take a look at possible test cases for each endpoint in [OAS_testing/pos
 - If you are unsure about how to structure your tests you can import already created test scripts: [OAS_testing/Coffee Shop API - tested.postman_collection.json](OAS_testing/Coffee%20Shop%20API%20-%20tested.postman_collection.json) file.
 
 
+![Result](images/postman_result.png)
 
