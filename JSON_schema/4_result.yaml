@@ -78,13 +78,46 @@ properties:
           description: "Possible options for the modifier"
           items:
             type: string
-            example: "Whole Milk"
           minItems: 1
           uniqueItems: true
-      # The modifier must have a name and options
       required:
         - name
         - options
+
+  # An optional object representing promotion details
+  promotion:
+    type: object
+    description: "Details of the promotion applied to the menu item"
+    # The promotion object must match exactly one of the following schemas
+    oneOf:
+      # Discount Promotion schema
+      - type: object
+        properties:
+          type:
+            type: string
+            enum:
+              - discount
+            description: "Type of promotion"
+          amount:
+            type: number
+            description: "Discount amount"
+        required:
+          - type
+          - amount
+      # Buy One Get One Free Promotion schema
+      - type: object
+        properties:
+          type:
+            type: string
+            enum:
+              - bogo
+            description: "Type of promotion"
+          description:
+            type: string
+            description: "Description of the promotion"
+        required:
+          - type
+          - description
 
 # Specifies that the 'id', 'name', and 'price' properties are mandatory
 required:
